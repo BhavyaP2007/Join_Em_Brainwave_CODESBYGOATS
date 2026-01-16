@@ -14,3 +14,5 @@ FLutter
 Sqflite (SQLite + Flutter)
 Python
 On-demand Agents
+
+IMPORTANT : Currently, a "sample" of the app has been uploaded here. This includes sign up and login. Further building is currently under progress. 
