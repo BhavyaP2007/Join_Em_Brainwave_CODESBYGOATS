@@ -22,10 +22,20 @@ class _LoginPageState extends State<LoginPage>{
         print(email);
         print(password);
         final userdetails = await _databaseService.LoginUser(email, password);
-        print(userdetails);
-        Navigator.push(context,
-        MaterialPageRoute(builder: (context)=> WelcomePage())
-        );
+        if(userdetails != null && userdetails.isNotEmpty){
+          print(userdetails);
+
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context)=> WelcomePage(userdetails: userdetails))
+          );
+        }
+        else{
+          QuickAlert.show(context: context, type: QuickAlertType.error,text: "Incorrect Password",confirmBtnText: "Retry",confirmBtnColor: Color(0xFFe4544d),onConfirmBtnTap: (){
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          });
+        }
+
       }
       else{
         QuickAlert.show(context: context, type: QuickAlertType.error,text: "No such user exists",confirmBtnText: "Create Account",confirmBtnColor: Color(0xFFe4544d),onConfirmBtnTap: (){

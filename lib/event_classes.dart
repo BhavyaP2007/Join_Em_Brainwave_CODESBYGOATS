@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:join_em/event_info.dart';
 
 
 class Event{
@@ -8,35 +12,53 @@ class Event{
 }
 class Competition{
   late final Event event;
-  late String name,image_path,description,prizes,schedule,date_of_event,online_offline,venue,faqs,text_file,reviews,n_participants,total_participants,team_data;
-  Competition({required this.name,required this.image_path,required this.event});
+  late final DateTime date_of_event;
+  late String name,image_path,description,prizes,schedule,online_offline,faqs,text_file,reviews;
+  Competition({required this.name,required this.image_path,required this.event,required this.date_of_event});
 }
 class EventCard extends StatelessWidget{
   late final Competition competition;
-  EventCard({super.key,required this.competition});
+  late int id;
+  EventCard({super.key,required this.competition,required this.id});
   @override
   Widget build(BuildContext context) {
+    final DateFormat formatter = DateFormat.yMMMd("en-US");
     // TODO: implement build
-    return Column(
-      children: [
-        Container(
-          height: 140,
-          margin: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(image: NetworkImage(competition.image_path),fit: BoxFit.cover)),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 10,right: 10),
-          child: Row(
-            children: [
-              Text(competition.name),
-              Spacer(),
-              Text(competition.event.event_type),
-            ],
+    return InkWell(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>EventInfo(id: id)));
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 160,
+            margin: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                image: DecorationImage(image: FileImage(File(competition.image_path)))
+            )
           ),
-        )
-      ],
+          Padding(
+            padding: const EdgeInsets.only(left: 20,right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(competition.name),
+                    Spacer(),
+                    Text(formatter.format(competition.date_of_event.toLocal()))
+                  ],
+                ),
+                Opacity(
+                    opacity: 0.5,
+                    child: Text(competition.event.event_type)),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
